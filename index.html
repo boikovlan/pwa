@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TOPOLOGY CRYPTO v3.3 (THEMES)</title>
+    <style>
+        :root {
+            /* === LIGHT THEME (DEFAULT) === */
+            --bg-body: #f4f6f8;
+            --bg-panel: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+
+            /* Accents Light */
+            --color-enc: #e53e3e; /* Red */
+            --color-dec: #3182ce; /* Blue */
+            --color-zip: #d69e2e; /* Orange/Gold */
+            --color-gen: #4a5568; /* Dark Gray */
+            
+            --btn-txt: #fff;
+            --log-bg: #1a202c;
+            --slot-bg: #edf2f7;
+            
+            --font-ui: system-ui, -apple-system, sans-serif;
+            --font-mono: "Fira Code", "Consolas", monospace;
+        }
+
+        [data-theme="dark"] {
+            /* === DARK THEME === */
+            --bg-body: #0a0a0a;
+            --bg-panel: #141414;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+            --border-color: #2a2a2a;
+            --shadow: 0 4px 20px rgba(0,0,0,0.5);
+
+            /* Accents Dark Neon */
+            --color-enc: #ff2a68;
+            --color-dec: #05d5ff;
+            --color-zip: #ffcc00;
+            --color-gen: #333333;
+            
+            --btn-txt: #000;
+            --log-bg: #000;
+            --slot-bg: #111;
+        }
+
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; background: var(--bg-body); color: var(--text-primary); font-family: var(--font-ui); display: flex; flex-direction: column; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+
+        /* HEADER */
+        header { background: var(--bg-panel); border-bottom: 1px solid var(--border-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+        h1 { margin: 0; font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; }
+        .tag { background: var(--color-dec); color: #fff; padding: 2px 6px; font-size: 0.7rem; border-radius: 4px; margin-left: 5px; }
+        
+        /* THEME TOGGLE */
+        .theme-switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .theme-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--color-dec); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* LAYOUT */
+        .container { flex: 1; width: 100%; max-width: 900px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        .panel { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; box-shadow: var(--shadow); transition: background 0.3s; }
+        .head { font-size: 0.75rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; justify-content: space-between; }
+
+        /* INPUTS */
+        .drop-zone { border: 2px dashed var(--border-color); padding: 25px; text-align: center; cursor: pointer; transition: 0.2s; color: var(--text-secondary); font-size: 0.85rem; background: var(--bg-body); border-radius: 6px; }
+        .drop-zone:hover { border-color: var(--color-dec); color: var(--color-dec); }
+        input[type="password"] { width: 100%; padding: 12px; background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-primary); font-family: var(--font-mono); margin-top: 10px; border-radius: 4px; }
+
+        /* RGB SUITE */
+        .rgb-tools { display: flex; flex-direction: column; gap: 10px; }
+        .rgb-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
+        
+        /* BUTTONS */
+        button { border: none; border-radius: 6px; padding: 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; color: #fff; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(1); }
+        
+        .btn-gen { background: var(--color-gen); color: #fff; width: 100%; }
+        .btn-gen:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .btn-r { background: #e53e3e; } .btn-g { background: #38a169; } .btn-b { background: #3182ce; }
+        .btn-zip { background: var(--color-zip); color: #000; }
+
+        .btn-load-zip { background: transparent; border: 1px dashed var(--color-zip); color: var(--text-primary); width: 100%; margin-bottom: 10px; }
+        .btn-load-zip:hover { background: rgba(255, 204, 0, 0.1); }
+
+        /* SLOTS */
+        .slot-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .slot { background: var(--slot-bg); border: 1px solid var(--border-color); padding: 15px 5px; text-align: center; font-size: 0.65rem; color: var(--text-secondary); cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .slot.filled { border: 2px solid var(--color-dec); color: var(--text-primary); font-weight: bold; }
+
+        /* CANVAS */
+        .viewport { 
+            background: #000; /* Always dark for better contrast */
+            border: 1px solid var(--border-color); 
+            min-height: 200px; 
+            display: flex; justify-content: center; align-items: center; 
+            overflow: hidden; 
+            background-image: radial-gradient(#333 1px, transparent 1px); 
+            background-size: 10px 10px; 
+            padding: 5px; border-radius: 4px;
+        }
+        canvas { width: 100% !important; height: auto !important; display: block; object-fit: contain; }
+
+        /* ACTIONS */
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-enc { background: var(--color-enc); color: #fff; padding: 15px; }
+        .btn-dec { background: var(--color-dec); color: #fff; padding: 15px; }
+
+        /* SLIDER */
+        .slider-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; background: var(--bg-body); padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); }
+        input[type=range] { flex: 1; cursor: pointer; }
+        .qual-val { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-primary); width: 40px; text-align: right; }
+
+        /* LOGS */
+        .logs { background: var(--log-bg); color: #00ff00; font-family: var(--font-mono); font-size: 0.75rem; height: 120px; overflow-y: auto; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .ln-err { color: #ff4444; } .ln-sys { color: #00ffff; }
+
+        /* DOCS */
+        .docs { font-size: 0.85rem; line-height: 1.6; color: var(--text-primary); }
+        .docs h3 { border-bottom: 2px solid var(--color-dec); padding-bottom: 5px; margin-top: 20px; font-size: 1rem; }
+        .docs ul { padding-left: 20px; }
+        .docs li { margin-bottom: 5px; }
+        
+        footer { font-size: 0.75rem; text-align: center; padding: 30px; color: var(--text-secondary); font-family: var(--font-mono); border-top: 1px solid var(--border-color); background: var(--bg-body); margin-top: 20px;}
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="display:flex; align-items:center;">
+        <h1>TOPOLOGY <span class="tag">v3.3</span></h1>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:0.7rem; font-weight:bold; color:var(--text-secondary)">THEME</span>
+        <label class="theme-switch">
+            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+            <span class="slider"></span>
+        </label>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="panel">
+        <div class="head">01 // ИСХОДНЫЕ ДАННЫЕ (SOURCE INPUT)</div>
+        <div class="drop-zone" id="dropArea">
+            НАЖМИТЕ ИЛИ ПЕРЕТАЩИТЕ ИЗОБРАЖЕНИЕ<br>
+            <span style="font-size:0.7em; opacity:0.7">(CLICK OR DRAG IMAGE HERE)</span>
+        </div>
+        <input type="file" id="fileIn" accept="image/*" style="display:none">
+        <input type="password" id="keyIn" placeholder="КЛЮЧ ШИФРОВАНИЯ (ENCRYPTION KEY)..." autocomplete="off">
+    </div>
+
+    <div class="panel">
+        <div class="head">02 // RGB БЕЗОПАСНОСТЬ (RGB SECURITY SUITE)</div>
+        
+        <button class="btn-gen" id="btnGen" onclick="app.generateMaps()" disabled>
+            ⚠️ ГЕНЕРИРОВАТЬ RGB КАРТЫ (GENERATE RGB MAPS)
+        </button>
+        
+        <div class="rgb-tools" style="margin-top:10px">
+            <div class="rgb-row">
+                <button class="btn-r" id="btnSaveR" onclick="app.saveMap('r')" disabled>SAVE R</button>
+                <button class="btn-g" id="btnSaveG" onclick="app.saveMap('g')" disabled>SAVE G</button>
+                <button class="btn-b" id="btnSaveB" onclick="app.saveMap('b')" disabled>SAVE B</button>
+                <button class="btn-zip" id="btnSaveZip" onclick="app.saveZip()" disabled>ZIP ALL</button>
+            </div>
+        </div>
+
+        <div style="border-top:1px dashed var(--border-color); margin:15px 0;"></div>
+
+        <button class="btn-load-zip" onclick="$('zipIn').click()">
+            📂 АВТО-ЗАГРУЗКА ИЗ ZIP (AUTO-RESTORE FROM ZIP)
+        </button>
+        <input type="file" id="zipIn" accept=".zip" style="display:none" onchange="app.handleZip(this)">
+
+        <div class="slot-grid">
+            <div class="slot slot-r" id="slotR" onclick="$('inR').click()">RED MAP<br>(EMPTY)</div>
+            <div class="slot slot-g" id="slotG" onclick="$('inG').click()">GREEN MAP<br>(EMPTY)</div>
+            <div class="slot slot-b" id="slotB" onclick="$('inB').click()">BLUE MAP<br>(EMPTY)</div>
+        </div>
+        <input type="file" id="inR" style="display:none" onchange="app.manualLoad(this,'r')">
+        <input type="file" id="inG" style="display:none" onchange="app.manualLoad(this,'g')">
+        <input type="file" id="inB" style="display:none" onchange="app.manualLoad(this,'b')">
+
+        <button class="btn-gen" style="margin-top:10px" onclick="app.mergeMaps()">
+            🔗 ОБЪЕДИНИТЬ СЛОИ (MERGE LAYERS)
+        </button>
+    </div>
+
+    <div class="panel">
+        <div class="head">
+            <span>03 // ПРОСМОТР (VIEWPORT)</span>
+            <span id="pxInfo">0x0</span>
+        </div>
+        <div class="viewport">
+            <canvas id="cvs"></canvas>
+        </div>
+        <div style="background:var(--bg-body); height:6px; margin-top:10px; border-radius:3px; overflow:hidden">
+            <div id="pg" style="width:0%; height:100%; background:var(--color-dec); transition:0.1s"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-secondary); margin-top:5px;">
+            <span id="st">ОЖИДАНИЕ (IDLE)</span>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="head">04 // ЯДРО И ЭКСПОРТ (ENGINE & EXPORT)</div>
+        <div class="actions">
+            <button class="btn-enc" onclick="app.engine(true)">🔒 КОДИРОВАТЬ (ENCRYPT)</button>
+            <button class="btn-dec" onclick="app.engine(false)">🔓 ДЕКОДИРОВАТЬ (DECRYPT)</button>
+        </div>
+        
+        <div style="margin-top:15px; border-top:1px solid var(--border-color); padding-top:15px;">
+            <button class="btn-gen" onclick="app.reset()" style="margin-bottom:10px; background:var(--text-secondary)">
+                ↺ СБРОС (RESET ORIGINAL)
+            </button>
+            
+            <button class="btn-gen" onclick="app.save('png')">💾 СОХРАНИТЬ PNG (LOSSLESS)</button>
+            
+            <div class="slider-row">
+                <span style="font-size:0.7rem; color:var(--text-secondary)">JPG СЖАТИЕ (QUALITY):</span>
+                <input type="range" id="jpgQ" min="70" max="100" value="95" oninput="$('qVal').innerText=this.value+'%'">
+                <span id="qVal" class="qual-val">95%</span>
+            </div>
+            <button class="btn-gen" onclick="app.save('jpg')">💾 СОХРАНИТЬ JPG (COMPRESSED)</button>
+        </div>
+    </div>
+
+    <div class="logs" id="logs">
+        <div>> System v3.3 Ready.</div>
+    </div>
+
+    <div class="panel docs">
+        <div class="head">05 // СПРАВКА И ИНСТРУКЦИЯ (MANUAL)</div>
+        
+        <h3>1. Описание Алгоритма (Algorithm Description)</h3>
+        <p>Приложение использует трехслойную симметричную криптографию. Алгоритм полностью обратим при наличии правильного ключа.</p>
+        <ul>
+            <li><b>Topology Layer (Топология):</b> Перемешивает пиксели по псевдослучайной траектории (Chaos Shuffle), разрушая структуру изображения.</li>
+            <li><b>CBC Layer (Диффузия):</b> Режим сцепления блоков (Cipher Block Chaining). Каждый пиксель XOR-ится с предыдущим, что "размазывает" информацию и скрывает контуры.</li>
+            <li><b>CTR Layer (Шум):</b> Гаммирование (Noise Mask). Наложение уникального шума для уничтожения однотонных областей.</li>
+        </ul>
+
+        <h3>2. RGB Secret Sharing (Разделение секретов)</h3>
+        <p>Для максимальной безопасности после шифрования вы можете разделить изображение на 3 файла (R, G, B каналы). Для расшифровки потребуются <b>все три файла</b>. Если злоумышленник получит только 2 из 3 файлов, изображение восстановить невозможно.</p>
+
+        <h3>3. Инструкция (Instruction)</h3>
+        <ul>
+            <li><b>Шифрование:</b> Загрузите фото -> Введите Пароль -> Нажмите "Кодировать". Сохраните результат в PNG или JPG. Опционально: Нажмите "Генерировать RGB карты" и сохраните ZIP.</li>
+            <li><b>Дешифровка (Обычная):</b> Загрузите зашифрованное фото -> Введите Пароль -> Нажмите "Декодировать".</li>
+            <li><b>Дешифровка (RGB ZIP):</b> Нажмите "Авто-загрузка из ZIP", выберите архив с картами. Нажмите "Объединить слои", затем введите пароль и нажмите "Декодировать".</li>
+        </ul>
+    </div>
+
+</div>
+
+<footer>
+    TOPOLOGY CRYPTO v3.3 | THEME SUPPORT | Gemini 2.0 Flash<br>
+    2026-01-01
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// --- THEME MANAGER ---
+function toggleTheme() {
+    const body = document.body;
+    const isDark = $('themeToggle').checked;
+    if(isDark) {
+        body.setAttribute('data-theme', 'dark');
+    } else {
+        body.removeAttribute('data-theme');
+    }
+}
+
+// --- LOGGER (Bilingual) ---
+const log = (msg, type='') => {
+    const d = document.createElement('div');
+    d.className = type === 'err' ? 'ln-err' : (type === 'sys' ? 'ln-sys' : '');
+    d.innerText = `> ${msg}`;
+    $('logs').prepend(d);
+};
+
+// --- MINI ZIP LIBRARY (Pure JS) ---
+const MiniZip = {
+    create: (files) => {
+        const chunks = [];
+        let offset = 0;
+        const centralDir = [];
+        const crcTable = new Int32Array(256);
+        for(let i=0; i<256; i++) {
+            let c = i;
+            for(let k=0; k<8; k++) c = ((c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1));
+            crcTable[i] = c;
+        }
+        const crc32 = (u8) => {
+            let crc = -1;
+            for(let i=0; i<u8.length; i++) crc = (crc>>>8) ^ crcTable[(crc^u8[i])&0xFF];
+            return (crc^-1)>>>0;
+        };
+
+        files.forEach(f => {
+            const nameEnc = new TextEncoder().encode(f.name);
+            const crc = crc32(f.data);
+            const size = f.data.length;
+            
+            const h = new Uint8Array(30 + nameEnc.length);
+            const v = new DataView(h.buffer);
+            v.setUint32(0, 0x04034b50, true);
+            v.setUint16(4, 10, true);
+            v.setUint16(6, 0, true);
+            v.setUint16(8, 0, true); 
+            v.setUint16(10, 0, true); v.setUint16(12, 0, true);
+            v.setUint32(14, crc, true);
+            v.setUint32(18, size, true); 
+            v.setUint32(22, size, true); 
+            v.setUint16(26, nameEnc.length, true);
+            v.setUint16(28, 0, true); 
+            h.set(nameEnc, 30);
+
+            chunks.push(h);
+            chunks.push(f.data);
+
+            const cd = new Uint8Array(46 + nameEnc.length);
+            const cv = new DataView(cd.buffer);
+            cv.setUint32(0, 0x02014b50, true);
+            cv.setUint16(4, 10, true);
+            cv.setUint16(6, 10, true);
+            cv.setUint16(8, 0, true);
+            cv.setUint16(10, 0, true);
+            cv.setUint32(16, crc, true);
+            cv.setUint32(20, size, true);
+            cv.setUint32(24, size, true);
+            cv.setUint16(28, nameEnc.length, true);
+            cv.setUint16(30, 0, true);
+            cv.setUint16(32, 0, true);
+            cv.setUint16(34, 0, true);
+            cv.setUint16(36, 0, true);
+            cv.setUint32(38, 0, true);
+            cv.setUint32(42, offset, true);
+            cd.set(nameEnc, 46);
+            
+            centralDir.push(cd);
+            offset += h.length + size;
+        });
+
+        const cdStart = offset;
+        centralDir.forEach(cd => { chunks.push(cd); offset += cd.length; });
+        
+        const eocd = new Uint8Array(22);
+        const ev = new DataView(eocd.buffer);
+        ev.setUint32(0, 0x06054b50, true);
+        ev.setUint16(4, 0, true);
+        ev.setUint16(6, 0, true);
+        ev.setUint16(8, files.length, true);
+        ev.setUint16(10, files.length, true);
+        ev.setUint32(12, offset - cdStart, true);
+        ev.setUint32(16, cdStart, true);
+        chunks.push(eocd);
+
+        return new Blob(chunks, {type: 'application/zip'});
+    },
+
+    unzip: async (blob) => {
+        const buf = await blob.arrayBuffer();
+        const view = new DataView(buf);
+        const files = {};
+        let pos = 0;
+
+        while(pos < buf.byteLength - 30) {
+            if(view.getUint32(pos, true) === 0x04034b50) {
+                const nameLen = view.getUint16(pos+26, true);
+                const extraLen = view.getUint16(pos+28, true);
+                const compSize = view.getUint32(pos+18, true);
+                const nameBytes = new Uint8Array(buf, pos+30, nameLen);
+                const name = new TextDecoder().decode(nameBytes);
+                const dataStart = pos + 30 + nameLen + extraLen;
+                const data = new Uint8Array(buf, dataStart, compSize);
+                files[name.toLowerCase()] = new Blob([data], {type:'image/png'});
+                pos = dataStart + compSize;
+            } else {
+                pos++;
+            }
+        }
+        return files;
+    }
+};
+
+// --- APP ---
+const app = {
+    cvs: $('cvs'),
+    ctx: null,
+    orig: null,
+    busy: false,
+    blobs: { r: null, g: null, b: null },
+    inputs: { r: null, g: null, b: null },
+
+    init() {
+        this.ctx = this.cvs.getContext('2d', {willReadFrequently:true});
+        $('dropArea').onclick = () => $('fileIn').click();
+        $('fileIn').onchange = e => this.load(e.target.files[0]);
+    },
+
+    load(file) {
+        if(!file) return;
+        const img = new Image();
+        img.onload = () => {
+            this.cvs.width = img.width; this.cvs.height = img.height;
+            this.ctx.drawImage(img,0,0);
+            this.orig = this.ctx.getImageData(0,0,img.width,img.height);
+            $('pxInfo').innerText = `${img.width}x${img.height}`;
+            log(`Загружено (Loaded): ${file.name}`, 'sys');
+            this.reset();
+        };
+        img.src = URL.createObjectURL(file);
+    },
+
+    reset() {
+        if(this.orig) this.ctx.putImageData(this.orig,0,0);
+        $('btnGen').disabled = true;
+        this.disableSaveBtns();
+        this.clearSlots();
+        $('pg').style.width='0%';
+        $('st').innerText='ГОТОВО (READY)';
+    },
+
+    disableSaveBtns() {
+        ['btnSaveR','btnSaveG','btnSaveB','btnSaveZip'].forEach(id=>$(id).disabled=true);
+        this.blobs = {r:null, g:null, b:null};
+    },
+
+    clearSlots() {
+        this.inputs = {r:null, g:null, b:null};
+        ['slotR','slotG','slotB'].forEach(id=>{
+            $(id).className = `slot ${id.replace('slot','slot-').toLowerCase()}`;
+            $(id).innerHTML = `${id.replace('slot','').toUpperCase()} MAP<br>(EMPTY)`;
+        });
+    },
+
+    // --- MAP GENERATION ---
+    async generateMaps() {
+        if(this.busy) return;
+        this.busy = true;
+        $('st').innerText = 'ГЕНЕРАЦИЯ RGB (GENERATING RGB)...';
+        
+        const W = this.cvs.width, H = this.cvs.height;
+        const sData = this.ctx.getImageData(0,0,W,H).data;
+
+        const makeBlob = (chan) => {
+            const c = document.createElement('canvas');
+            c.width=W; c.height=H;
+            const x = c.getContext('2d');
+            const d = x.createImageData(W,H);
+            const dd = d.data;
+            for(let i=0; i<sData.length; i+=4) {
+                dd[i]   = (chan===0) ? sData[i] : 0;
+                dd[i+1] = (chan===1) ? sData[i+1] : 0;
+                dd[i+2] = (chan===2) ? sData[i+2] : 0;
+                dd[i+3] = 255;
+            }
+            x.putImageData(d,0,0);
+            return new Promise(r => c.toBlob(r, 'image/png'));
+        };
+
+        try {
+            this.blobs.r = await makeBlob(0);
+            this.blobs.g = await makeBlob(1);
+            this.blobs.b = await makeBlob(2);
+            ['btnSaveR','btnSaveG','btnSaveB','btnSaveZip'].forEach(id=>$(id).disabled=false);
+            log('RGB Карты созданы (RGB Maps generated)', 'sys');
+            $('st').innerText = 'КАРТЫ ГОТОВЫ (MAPS READY)';
+        } catch(e) { log('Ошибка (Error)', 'err'); }
+        this.busy = false;
+    },
+
+    saveMap(ch) {
+        if(!this.blobs[ch]) return;
+        this.download(this.blobs[ch], `map_${ch}.png`);
+    },
+
+    async saveZip() {
+        if(!this.blobs.r) return;
+        $('st').innerText = 'АРХИВАЦИЯ (ZIPPING)...';
+        const read = b => new Promise(r => {
+            const fr = new FileReader();
+            fr.onload = () => r(new Uint8Array(fr.result));
+            fr.readAsArrayBuffer(b);
+        });
+        const dR = await read(this.blobs.r);
+        const dG = await read(this.blobs.g);
+        const dB = await read(this.blobs.b);
+        const zipBlob = MiniZip.create([
+            {name: 'map_r.png', data: dR},
+            {name: 'map_g.png', data: dG},
+            {name: 'map_b.png', data: dB}
+        ]);
+        this.download(zipBlob, `SECURE_ARCHIVE_${Date.now()}.zip`);
+        $('st').innerText = 'ZIP СОХРАНЕН (SAVED)';
+        log('Архив создан (Archive created)', 'sys');
+    },
+
+    download(blob, name) {
+        const u = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = u; a.download = name;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(u), 1000);
+    },
+
+    // --- LOADING ---
+    async handleZip(el) {
+        if(!el.files[0]) return;
+        const f = el.files[0];
+        $('st').innerText = 'ЧТЕНИЕ ZIP (READING ZIP)...';
+        try {
+            const files = await MiniZip.unzip(f);
+            let count = 0;
+            if(files['map_r.png']) { this.assignSlot('r', files['map_r.png']); count++; }
+            if(files['map_g.png']) { this.assignSlot('g', files['map_g.png']); count++; }
+            if(files['map_b.png']) { this.assignSlot('b', files['map_b.png']); count++; }
+            log(`Извлечено ${count} карт (Extracted ${count} maps)`, 'sys');
+            $('st').innerText = 'ZIP ЗАГРУЖЕН (LOADED)';
+        } catch(e) { log('Ошибка ZIP (Zip Error)', 'err'); }
+    },
+
+    manualLoad(el, ch) {
+        if(el.files[0]) this.assignSlot(ch, el.files[0]);
+    },
+
+    assignSlot(ch, blob) {
+        this.inputs[ch] = blob;
+        const slot = $(`slot${ch.toUpperCase()}`);
+        slot.classList.add('filled');
+        slot.innerHTML = `MAP ${ch.toUpperCase()}<br>LOADED`;
+    },
+
+    async mergeMaps() {
+        if(!this.inputs.r || !this.inputs.g || !this.inputs.b) return alert('Загрузите все 3 карты! (Load all 3 maps!)');
+        $('st').innerText = 'ОБЪЕДИНЕНИЕ (MERGING)...';
+        const loadB = (b) => new Promise(res => {
+            const i = new Image();
+            i.onload = () => {
+                const c = document.createElement('canvas');
+                c.width=i.width; c.height=i.height;
+                c.getContext('2d').drawImage(i,0,0);
+                res(c.getContext('2d').getImageData(0,0,i.width,i.height));
+            };
+            i.src = URL.createObjectURL(b);
+        });
+        const [dR, dG, dB] = await Promise.all([loadB(this.inputs.r), loadB(this.inputs.g), loadB(this.inputs.b)]);
+        if(dR.width !== dG.width || dR.width !== dB.width) return alert('Ошибка размера! (Size mismatch!)');
+        
+        this.cvs.width = dR.width; this.cvs.height = dR.height;
+        const fin = this.ctx.createImageData(dR.width, dR.height);
+        const dd = fin.data;
+        for(let i=0; i<dd.length; i+=4) {
+            dd[i]   = dR.data[i];
+            dd[i+1] = dG.data[i+1];
+            dd[i+2] = dB.data[i+2];
+            dd[i+3] = 255;
+        }
+        this.ctx.putImageData(fin,0,0);
+        this.orig = fin;
+        $('st').innerText = 'ОБЪЕДИНЕНО (MERGED)';
+        log('Карты объединены (Maps merged)', 'sys');
+    },
+
+    // --- CRYPTO ENGINE ---
+    async engine(enc) {
+        if(this.busy) return;
+        const key = $('keyIn').value;
+        if(!key) return alert('Введите ключ! (Enter Key!)');
+        this.busy = true;
+        
+        const W=this.cvs.width, H=this.cvs.height;
+        const d = this.ctx.getImageData(0,0,W,H);
+        const arr = d.data;
+        
+        const PRNG = function(s) {
+            let h=0xdeadbeef;
+            for(let i=0;i<s.length;i++) h=Math.imul(h^s.charCodeAt(i), 2654435761);
+            return () => { h=Math.imul(h^h>>>16, 2246822507); h=Math.imul(h^h>>>13, 3266489909); return (h>>>0)/4294967296; }
+        };
+        const upd = (p,t) => { $('pg').style.width=p+'%'; $('st').innerText=t; };
+
+        const topo = async (rev) => {
+            const rng = PRNG(key+'_TP');
+            const total = (W*H)*3; 
+            const batch = 200000;
+            const loops = Math.ceil(total/batch);
+            const seeds=[]; for(let i=0;i<loops;i++) seeds.push(rng());
+            const start=rev?loops-1:0, end=rev?-1:loops, step=rev?-1:1;
+            
+            for(let b=start; b!==end; b+=step) {
+                const lrng = PRNG(key+seeds[b]);
+                const cnt = (b===loops-1)?(total%batch||batch):batch;
+                const idx = new Int32Array(cnt*2);
+                for(let i=0;i<cnt;i++) {
+                    idx[i*2] = Math.floor(lrng()*W*H);
+                    idx[i*2+1] = Math.floor(lrng()*W*H);
+                }
+                if(!rev) {
+                    for(let i=0;i<cnt;i++) {
+                        const a=idx[i*2]*4, b=idx[i*2+1]*4;
+                        [arr[a],arr[b]]=[arr[b],arr[a]];
+                        [arr[a+1],arr[b+1]]=[arr[b+1],arr[a+1]];
+                        [arr[a+2],arr[b+2]]=[arr[b+2],arr[a+2]];
+                    }
+                } else {
+                    for(let i=cnt-1;i>=0;i--) {
+                        const a=idx[i*2]*4, b=idx[i*2+1]*4;
+                        [arr[a],arr[b]]=[arr[b],arr[a]];
+                        [arr[a+1],arr[b+1]]=[arr[b+1],arr[a+1]];
+                        [arr[a+2],arr[b+2]]=[arr[b+2],arr[a+2]];
+                    }
+                }
+                if(b%3===0) { this.ctx.putImageData(d,0,0); await new Promise(r=>setTimeout(r,0)); }
+            }
+        };
+
+        const cbc = async (rev) => {
+            let pr=123, pg=213, pb=44;
+            if(!rev) {
+                for(let i=0; i<arr.length; i+=4) {
+                    arr[i]^=pr; pr=arr[i];
+                    arr[i+1]^=pg; pg=arr[i+1];
+                    arr[i+2]^=pb; pb=arr[i+2];
+                }
+            } else {
+                for(let i=arr.length-4; i>=4; i-=4) {
+                    arr[i]^=arr[i-4]; arr[i+1]^=arr[i-3]; arr[i+2]^=arr[i-2];
+                }
+                arr[0]^=pr; arr[1]^=pg; arr[2]^=pb;
+            }
+        };
+
+        try {
+            if(enc) {
+                await cbc(false); await topo(false);
+                $('btnGen').disabled = false;
+            } else {
+                await topo(true); await cbc(true);
+            }
+            this.ctx.putImageData(d,0,0);
+            upd(100, enc?'ЗАШИФРОВАНО (ENCRYPTED)':'РАСШИФРОВАНО (DECRYPTED)');
+            log(enc?'Шифрование завершено (Encrypted)':'Дешифровка завершена (Decrypted)', 'sys');
+        } catch(e) { console.error(e); }
+        this.busy = false;
+    },
+
+    save(fmt) {
+        if(!this.orig) return alert("Нет изображения! (No image!)");
+        log(`Сохранение ${fmt.toUpperCase()}...`, 'sys');
+        
+        let q = 0.95;
+        if(fmt === 'jpg') {
+             q = parseInt($('jpgQ').value) / 100;
+        }
+
+        setTimeout(() => {
+            this.cvs.toBlob(b => {
+                const u = URL.createObjectURL(b);
+                const a = document.createElement('a');
+                a.href=u; a.download=`result_${Date.now()}.${fmt}`;
+                a.click();
+            }, fmt === 'png' ? 'image/png' : 'image/jpeg', q);
+        }, 50);
+    }
+};
+
+app.init();
+</script>
+</body>
+</html>
