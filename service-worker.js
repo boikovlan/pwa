@@ -1,7 +1,7 @@
 const CACHE_NAME = 'topology-crypto-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
+  'https://pwa-kappa-puce.vercel.app/',
+  'https://pwa-kappa-puce.vercel.app/index.html',
   // Добавьте другие файлы, если есть, например CSS/JS, если они отдельные
 ];
 
